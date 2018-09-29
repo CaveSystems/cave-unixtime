@@ -14,13 +14,15 @@
     <PackageIconUrl>https://www.cavesystems.de/favicon.ico</PackageIconUrl>
     <PackageTags>CaveSystems UnixTime UnixTime32 UnixTime64</PackageTags>
     <PackageProjectUrl>https://www.cavesystems.de</PackageProjectUrl>
-    <PackageReleaseNotes>Aktueller Release Candidate 2018</PackageReleaseNotes>
     <Description>Provides functions and interop for unix timestamps 32bit unsigned and 64bit signed</Description>
+    <PackageProjectUrl>https://github.com/Dingsd4/cave-unixtime</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Dingsd4/cave-unixtime</RepositoryUrl>
+    <PackageReleaseNotes />
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>2018.928.2133.3095</FileVersion>
+    <FileVersion>2018.929.1557.598</FileVersion>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -58,5 +60,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\README.md">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>Cave.Progress.ReadMe.md</Link>
+    </Content>
+    <Content Include="..\LICENSE">
+      <Pack>true</Pack>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Link>LICENSE.LGPL3</Link>
+    </Content>
   </ItemGroup>
 </Project>
