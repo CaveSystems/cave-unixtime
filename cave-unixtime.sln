@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cave.UnixTime", "UnixTime\Cave.UnixTime.csproj", "{9C5A44FF-864A-46FA-81CF-D65BD2692596}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cave.UnixTime.Tests", "UnixTime.Tests\Cave.UnixTime.Tests.csproj", "{B7DCFAF0-4ACC-41A4-A736-2A51F20CD6AA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8F31076F-A15C-433B-A359-3D0A4284850F}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		Rebracer.xml = Rebracer.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C5A44FF-864A-46FA-81CF-D65BD2692596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C5A44FF-864A-46FA-81CF-D65BD2692596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C5A44FF-864A-46FA-81CF-D65BD2692596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C5A44FF-864A-46FA-81CF-D65BD2692596}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7DCFAF0-4ACC-41A4-A736-2A51F20CD6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7DCFAF0-4ACC-41A4-A736-2A51F20CD6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7DCFAF0-4ACC-41A4-A736-2A51F20CD6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7DCFAF0-4ACC-41A4-A736-2A51F20CD6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C41B6A84-ED8B-4F3D-BAAA-CA868D134FF4}
+	EndGlobalSection
+EndGlobal
