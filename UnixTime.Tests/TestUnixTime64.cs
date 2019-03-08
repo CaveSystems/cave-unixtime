@@ -1,26 +1,26 @@
 using Cave;
 using Cave.UnixTime;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace UnixTime.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestUnixTime64
     {
         const int structSize = 8;
 
-        [TestMethod]
+        [Test]
         public void TestMethodStruct()
         {
             Assert.AreEqual(false, new UnixTime64().Equals(null));
             Assert.AreEqual(new UnixTime64(), new UnixTime64());
-            Assert.AreEqual(0, new UnixTime64());
+            Assert.AreEqual(0, new UnixTime64().TimeStamp);
             Assert.AreEqual((UnixTime64)0, new UnixTime64());
             Assert.AreEqual(true, 0 == new UnixTime64().TimeStamp);
-            Assert.AreEqual(new DateTime(1970, 1, 1), new UnixTime64());
+            Assert.AreEqual(new DateTime(1970, 1, 1), (DateTime)new UnixTime64());
 
             unsafe
             {
@@ -49,7 +49,7 @@ namespace UnixTime.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodComparison()
         {
             Random rnd = new Random();
@@ -71,7 +71,7 @@ namespace UnixTime.Tests
             Assert.AreEqual(true, ((UnixTime64)copy).GetHashCode() == ((UnixTime64)last).GetHashCode());
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodOverflow()
         {
             var datetime = DateTime.Now;
@@ -111,7 +111,7 @@ namespace UnixTime.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodCompareTo()
         {
             Random rnd = new Random();
@@ -126,18 +126,21 @@ namespace UnixTime.Tests
 
             for (int i = 0; i < 1000; i++)
             {
-                Assert.AreEqual(test1[i], test2[i]);
+                Assert.AreEqual(test1[i], (DateTime)test2[i]);
+                Assert.AreEqual((UnixTime64)test1[i], test2[i]);
+                Assert.AreEqual(true, test2[i].Equals(test1[i]));
             }
             test1.Sort();
             test2.Sort();
             for (int i = 0; i < 1000; i++)
             {
-                Assert.AreEqual(test1[i], test2[i]);
+                Assert.AreEqual(test1[i], (DateTime)test2[i]);
+                Assert.AreEqual((UnixTime64)test1[i], test2[i]);
                 Assert.AreEqual(true, test2[i].Equals(test1[i]));
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodParse()
         {
             Random rnd = new Random();
@@ -149,13 +152,13 @@ namespace UnixTime.Tests
                 var uts = ut.ToString();
                 var utb = UnixTime64.Parse(uts);
 
-                Assert.AreEqual(datetime, ut);
-                Assert.AreEqual(datetime, utb);
+                Assert.AreEqual(datetime, (DateTime)ut);
+                Assert.AreEqual(datetime, (DateTime)utb);
                 Assert.AreEqual(dts, uts);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodNow()
         {
             TimeSpan diff = default(TimeSpan);
@@ -168,7 +171,7 @@ namespace UnixTime.Tests
             Assert.AreEqual(true, Math.Abs(diff.Ticks) < TimeSpan.TicksPerSecond);
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodSubtract()
         {
             Random rnd = new Random();
@@ -209,7 +212,7 @@ namespace UnixTime.Tests
                     }
 
                     n++;
-                    Assert.AreEqual(datetime, ut);
+                    Assert.AreEqual(datetime, (DateTime)ut);
                     Assert.AreEqual(true, ut == datetime);
                     Assert.AreEqual(true, ut == ut.TimeStamp);
                     Assert.AreEqual(false, ut != datetime);
@@ -218,7 +221,7 @@ namespace UnixTime.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodAdd()
         {
             Random rnd = new Random();
@@ -257,7 +260,7 @@ namespace UnixTime.Tests
                     }
 
                     n++;
-                    Assert.AreEqual(datetime, ut);
+                    Assert.AreEqual(datetime, (DateTime)ut);
                     Assert.AreEqual(true, ut == datetime);
                     Assert.AreEqual(true, ut == ut.TimeStamp);
                     Assert.AreEqual(false, ut != datetime);

@@ -1,26 +1,26 @@
 using Cave;
 using Cave.UnixTime;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace UnixTime.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class TestUnixTime32
     {
         const int structSize = 4;
 
-        [TestMethod]
+        [Test]
         public void TestMethodStruct()
         {
             Assert.AreEqual(false, new UnixTime32().Equals(null));
             Assert.AreEqual(new UnixTime32(), new UnixTime32());
-            Assert.AreEqual(0, new UnixTime32());
+            Assert.AreEqual(0, new UnixTime32().TimeStamp);
             Assert.AreEqual((UnixTime32)0, new UnixTime32());
             Assert.AreEqual(true, 0 == new UnixTime32().TimeStamp);
-            Assert.AreEqual(new DateTime(1970, 1, 1), new UnixTime32());
+            Assert.AreEqual(new DateTime(1970, 1, 1), new UnixTime32().DateTime);
 
             unsafe
             {
@@ -49,7 +49,7 @@ namespace UnixTime.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodComparison()
         {
             Random rnd = new Random();
@@ -71,7 +71,7 @@ namespace UnixTime.Tests
             Assert.AreEqual(true, ((UnixTime32)copy).GetHashCode() == ((UnixTime32)last).GetHashCode());
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodOverflow()
         {
             var datetime = DateTime.Now;
@@ -112,7 +112,7 @@ namespace UnixTime.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodCompareTo()
         {
             Random rnd = new Random();
@@ -127,18 +127,20 @@ namespace UnixTime.Tests
 
             for (int i = 0; i < 1000; i++)
             {
-                Assert.AreEqual(test1[i], test2[i]);
+                Assert.AreEqual(test1[i], (DateTime)test2[i]);
+                Assert.AreEqual((UnixTime32)test1[i], test2[i]);
             }
             test1.Sort();
             test2.Sort();
             for (int i = 0; i < 1000; i++)
             {
-                Assert.AreEqual(test1[i], test2[i]);
+                Assert.AreEqual(test1[i], (DateTime)test2[i]);
+                Assert.AreEqual((UnixTime32)test1[i], test2[i]);
                 Assert.AreEqual(true, test2[i].Equals(test1[i]));
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodParse()
         {
             Random rnd = new Random();
@@ -150,13 +152,13 @@ namespace UnixTime.Tests
                 var u32s = u32.ToString();
                 var u32b = UnixTime32.Parse(u32s);
 
-                Assert.AreEqual(datetime, u32);
-                Assert.AreEqual(datetime, u32b);
+                Assert.AreEqual(datetime, (DateTime)u32);
+                Assert.AreEqual(datetime, (DateTime)u32b);
                 Assert.AreEqual(dts, u32s);
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodNow()
         {
             TimeSpan diff = default(TimeSpan);
@@ -169,34 +171,30 @@ namespace UnixTime.Tests
             Assert.AreEqual(true, Math.Abs(diff.Ticks) < TimeSpan.TicksPerSecond);
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodSubtract()
         {
             Random rnd = new Random();
             for (int i = 0; i < 1000; i++)
             {
-                var datetime = new DateTime(rnd.Next(1970, 3000), rnd.Next(1, 13), rnd.Next(1, 29), rnd.Next(0, 24), rnd.Next(0, 60), rnd.Next(0, 60), (DateTimeKind)rnd.Next(0, 3));
+                var datetime = new DateTime(rnd.Next(1970, 2035), rnd.Next(1, 13), rnd.Next(1, 29), rnd.Next(0, 24), rnd.Next(0, 60), rnd.Next(0, 60), (DateTimeKind)rnd.Next(0, 3));
                 UnixTime32 u32 = datetime;
 
-                bool overflow = false;
-                bool underflow = false;
-
-                for (int n = 0; n < 10 || !(overflow && underflow); n++)
+                for (int n = 0; n < 100; n++)
                 {
                     int seconds = (int)(rnd.NextDouble() * uint.MaxValue + int.MinValue);
 
-                    long test = u32.TimeStamp - seconds;
-                    if (test > uint.MaxValue)
+                    while (true)
                     {
-                        //would overflow
-                        seconds = -seconds;
-                        overflow = true;
-                    }
-                    else if (test < 0)
-                    {
-                        //would underflow
-                        seconds = -seconds;
-                        underflow = true;
+                        long test = -seconds;
+                        test += u32.TimeStamp;
+                        if (test > uint.MaxValue || test < 0)
+                        {
+                            //would overflow or underflow
+                            seconds /= 3;
+                            continue;
+                        }
+                        break;
                     }
 
                     switch (n % 2)
@@ -212,7 +210,7 @@ namespace UnixTime.Tests
                             break;
                     }
 
-                    Assert.AreEqual(datetime, u32);
+                    Assert.AreEqual(datetime, (DateTime)u32);
                     Assert.AreEqual(true, u32 == datetime);
                     Assert.AreEqual(true, u32 == u32.TimeStamp);
                     Assert.AreEqual(false, u32 != datetime);
@@ -221,34 +219,30 @@ namespace UnixTime.Tests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void TestMethodAdd()
         {
             Random rnd = new Random();
             for (int i = 0; i < 1000; i++)
             {
-                var datetime = new DateTime(rnd.Next(1970, 3000), rnd.Next(1, 13), rnd.Next(1, 29), rnd.Next(0, 24), rnd.Next(0, 60), rnd.Next(0, 60), (DateTimeKind)rnd.Next(0, 3));
+                var datetime = new DateTime(rnd.Next(1970, 2035), rnd.Next(1, 13), rnd.Next(1, 29), rnd.Next(0, 24), rnd.Next(0, 60), rnd.Next(0, 60), (DateTimeKind)rnd.Next(0, 3));
                 UnixTime32 u32 = datetime;
 
-                bool overflow = false;
-                bool underflow = false;
-
-                for (int n = 0; n < 10 || !(overflow && underflow); n++)
+                for (int n = 0; n < 100; n++)
                 {
                     int seconds = (int)(rnd.NextDouble() * uint.MaxValue + int.MinValue);
 
-                    long test = u32.TimeStamp + seconds;
-                    if (test > uint.MaxValue)
+                    while (true)
                     {
-                        //would overflow
-                        seconds = -seconds;
-                        overflow = true;
-                    }
-                    else if (test < 0)
-                    {
-                        //would underflow
-                        seconds = -seconds;
-                        underflow = true;
+                        long test = seconds;
+                        test += u32.TimeStamp;
+                        if (test > uint.MaxValue || test < 0)
+                        {
+                            //would overflow or underflow
+                            seconds /= 3;
+                            continue;
+                        }
+                        break;
                     }
 
                     switch (n % 2)
@@ -264,7 +258,7 @@ namespace UnixTime.Tests
                             break;
                     }
 
-                    Assert.AreEqual(datetime, u32);
+                    Assert.AreEqual(datetime, (DateTime)u32);
                     Assert.AreEqual(true, u32 == datetime);
                     Assert.AreEqual(true, u32 == u32.TimeStamp);
                     Assert.AreEqual(false, u32 != datetime);
